@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class MoveState : State<EnemyController>
+{
+    private Animator animator;
+    private CharacterController controller;
+    private NavMeshAgent agent;
+
+    private int isMovehash = Animator.StringToHash("IsMove");
+    private int moveSpeedHash = Animator.StringToHash("MoveSpeed");
+
+    float gravity = -9.8f;
+
+    public override void OnInitialized()
+    {
+        animator = context.GetComponent<Animator>();
+        controller = context.GetComponent<CharacterController>();
+
+        agent = context.GetComponent<NavMeshAgent>();
+    }
+
+    public override void OnEnter()
+    {
+        agent.stoppingDistance = context.AttackRange;
+        agent?.SetDestination(context.Target.position);
+
+        animator?.SetBool(isMovehash, true);
+    }
+
+    public override void Update(float deltaTime)
+    {
+        if (context.Target)
+        {
+            agent.SetDestination(context.Target.position);
+        }
+
+        controller.Move(Vector3.up * gravity * Time.deltaTime);
+        controller.Move(agent.velocity * Time.deltaTime);
+
+        if (agent.remainingDistance > agent.stoppingDistance + 0.01f)
+        {
+            animator.SetFloat(moveSpeedHash, agent.velocity.magnitude / agent.speed, .1f, Time.deltaTime);
+        }
+        else
+        {
+
+            if (!agent.pathPending)
+            {
+                animator.SetFloat(moveSpeedHash, 0);
+                animator.SetBool(isMovehash, false);
+                agent.ResetPath();
+
+                stateMachine.ChangeState<IdleState>();
+            }
+        }
+    }
+
+    public override void OnExit()
+    {
+        if (agent && agent.isActiveAndEnabled)
+        {
+            agent.stoppingDistance = 0.0f;
+            agent.ResetPath();
+        }        
+
+        animator?.SetBool(isMovehash, false);
+        animator?.SetFloat(moveSpeedHash, 0.0f);
+    }
+}
