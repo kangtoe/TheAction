@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     id: 1
-    type: 1
-    targetId: 0
-    count: 0
-    completedCount: 3
+    subpoints: []
+    rewardItems: []
     rewardExp: 10
     rewardGold: 10
-    rewardItemId: 10
     title: Acquire Item
     description: You must acquire item 1.
-  status: 1
+  status: 0

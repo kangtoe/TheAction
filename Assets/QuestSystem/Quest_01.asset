@@ -32,4 +32,4 @@ MonoBehaviour:
     rewardGold: 10
     title: 
     description: 
-  status: 3
+  status: 0

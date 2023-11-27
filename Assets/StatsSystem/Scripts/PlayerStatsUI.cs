@@ -3,7 +3,7 @@ using System.Collections;
 using FastCampus.InventorySystem.Inventory;
 using UnityEngine.UI;
 using FastCampus.InventorySystem.Items;
-using UnityEditor.Media;
+//using UnityEditor.Media;
 using UnityEngine.PlayerLoop;
 
 public class PlayerStatsUI : MonoBehaviour
